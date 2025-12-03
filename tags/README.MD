@@ -30,6 +30,8 @@ A lightweight, flexible, and editable **Tags Input** component built with React 
 
 ```tsx
 // tags-input.tsx
+"use client"
+
 import * as React from "react"
 import { X } from "lucide-react"
 import { cn } from "@/lib/utils"
@@ -38,6 +40,7 @@ export interface TagsInputProps extends Omit<React.InputHTMLAttributes<HTMLInput
   value?: string[]
   onChange?: (tags: string[]) => void
   placeholder?: string
+  limit?: number
 }
 
 export function TagsInput({
@@ -45,11 +48,13 @@ export function TagsInput({
   onChange,
   placeholder = "Type and press Enter...",
   className,
+  limit,
   ...props
 }: TagsInputProps) {
   const [inputValue, setInputValue] = React.useState("")
   const [editingIndex, setEditingIndex] = React.useState<number | null>(null)
   const [editingValue, setEditingValue] = React.useState("")
+  const [isExpanded, setIsExpanded] = React.useState(false)
   const inputRef = React.useRef<HTMLInputElement>(null)
 
   const handleAddTag = () => {
@@ -100,6 +105,10 @@ export function TagsInput({
     }
   }
 
+  const shouldLimitTags = limit !== undefined && limit > 0 && value.length > limit
+  const visibleTags = shouldLimitTags && !isExpanded ? value.slice(0, limit) : value
+  const remainingCount = shouldLimitTags ? value.length - limit : 0
+
   return (
     <div
       className={cn(
@@ -108,7 +117,7 @@ export function TagsInput({
       )}
       onClick={() => inputRef.current?.focus()}
     >
-      {value.map((tag, index) => (
+      {visibleTags.map((tag, index) => (
         <div
           key={index}
           className="inline-flex items-center gap-1 rounded-md bg-secondary px-2 py-1 text-sm text-secondary-foreground"
@@ -148,6 +157,32 @@ export function TagsInput({
         className="flex-1 bg-transparent text-sm outline-none placeholder:text-muted-foreground min-w-[120px]"
         {...props}
       />
+      {shouldLimitTags && !isExpanded && (
+        <button
+          type="button"
+          onClick={(e) => {
+            e.stopPropagation()
+            setIsExpanded(true)
+          }}
+          className="inline-flex items-center gap-1 rounded-md bg-primary px-2 py-1 text-sm text-primary-foreground hover:bg-primary/90 transition-colors"
+          aria-label={`Show ${remainingCount} more tags`}
+        >
+          +{remainingCount}
+        </button>
+      )}
+      {shouldLimitTags && isExpanded && (
+        <button
+          type="button"
+          onClick={(e) => {
+            e.stopPropagation()
+            setIsExpanded(false)
+          }}
+          className="inline-flex items-center gap-1 rounded-md bg-muted px-2 py-1 text-sm text-muted-foreground hover:bg-muted/80 transition-colors"
+          aria-label="Show less"
+        >
+          Show less
+        </button>
+      )}
     </div>
   )
 }
@@ -161,31 +196,77 @@ export function TagsInput({
 import { TagsInput } from "./tags-input"
 
 export default function Demo() {
-  const [tags, setTags] = React.useState<string[]>([])
+  const [tags, setTags] = React.useState<string[]>(["React", "Next.js", "TypeScript"])
+  const [limitedTags, setLimitedTags] = React.useState<string[]>([
+    "React",
+    "Next.js",
+    "TypeScript",
+    "Tailwind",
+    "Shadcn",
+    "Node.js",
+    "Express",
+    "MongoDB",
+  ])
 
   return (
-    <div className="w-full max-w-2xl space-y-6">
-      <div className="space-y-2">
-        <h1 className="text-3xl font-bold text-foreground">Tags Input Component</h1>
-        <p className="text-muted-foreground">
-          Type to add tags, double-click to edit, and click the X to remove them
-        </p>
-      </div>
-
-      <div className="space-y-4">
-        <div>
-          <label className="text-sm font-medium text-foreground mb-2 block">Your Tags</label>
-          <TagsInput value={tags} onChange={setTags} placeholder="Add a tag and press Enter..." />
-        </div>
-
-        <div className="rounded-lg border border-border bg-card p-4">
-          <h3 className="text-sm font-semibold text-card-foreground mb-2">Current Tags:</h3>
-          <p className="text-sm text-muted-foreground">
-            {tags.length > 0 ? tags.join(", ") : "No tags yet"}
+    <main className="flex min-h-screen flex-col items-center justify-center p-8 bg-background">
+      <div className="w-full max-w-2xl space-y-6">
+        <div className="space-y-2">
+          <h1 className="text-3xl font-bold text-foreground">Tags Input Component</h1>
+          <p className="text-muted-foreground">
+            Type to add tags, double-click to edit, and click the X to remove them
           </p>
         </div>
+
+        <div className="space-y-4">
+          <div>
+            <label className="text-sm font-medium text-foreground mb-2 block">Your Tags</label>
+            <TagsInput value={tags} onChange={setTags} placeholder="Add a tag and press Enter..." />
+          </div>
+
+          <div>
+            <label className="text-sm font-medium text-foreground mb-2 block">
+              Limited Tags (shows max 5, click +X to expand)
+            </label>
+            <TagsInput
+              value={limitedTags}
+              onChange={setLimitedTags}
+              placeholder="Add a tag and press Enter..."
+              limit={5}
+            />
+          </div>
+
+          <div className="rounded-lg border border-border bg-card p-4">
+            <h3 className="text-sm font-semibold text-card-foreground mb-2">Current Tags:</h3>
+            <p className="text-sm text-muted-foreground">{tags.length > 0 ? tags.join(", ") : "No tags yet"}</p>
+          </div>
+
+          <div className="rounded-lg border border-border bg-card p-4">
+            <h3 className="text-sm font-semibold text-card-foreground mb-2">Limited Tags:</h3>
+            <p className="text-sm text-muted-foreground">
+              {limitedTags.length > 0 ? limitedTags.join(", ") : "No tags yet"}
+            </p>
+          </div>
+        </div>
+
+        <div className="rounded-lg border border-border bg-muted/50 p-4">
+          <h3 className="text-sm font-semibold text-foreground mb-2">How to use:</h3>
+          <ul className="text-sm text-muted-foreground space-y-1 list-disc list-inside">
+            <li>
+              Type a tag and press{" "}
+              <kbd className="px-1.5 py-0.5 text-xs bg-background border border-border rounded">Enter</kbd> to add it
+            </li>
+            <li>Double-click on a tag to edit it</li>
+            <li>Click the X icon to remove a tag</li>
+            <li>
+              Press <kbd className="px-1.5 py-0.5 text-xs bg-background border border-border rounded">Backspace</kbd>{" "}
+              with empty input to remove the last tag
+            </li>
+            <li>Use the limit prop to show only a specific number of tags with a +X indicator for more</li>
+          </ul>
+        </div>
       </div>
-    </div>
+    </main>
   )
 }
 ```

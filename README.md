@@ -2,11 +2,11 @@
 
 *A growing library of reusable UI components for my personal and professional projects.*
 
-This repo makes it easy for me to:
-✔️ Reuse components across projects
-✔️ Keep UI consistent
-✔️ Avoid re-writing the same things
-✔️ Ship faster 🚀
+This repo makes it easy for me to:  
+✔️ Reuse components across projects  
+✔️ Keep UI consistent  
+✔️ Avoid re-writing the same things  
+✔️ Ship faster 🚀  
 
 ---
 

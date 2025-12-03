@@ -1,10 +1,10 @@
 # 🎯 Multi-Select Combobox (React + TypeScript)
 
-A powerful and flexible **multi-select dropdown** built using React + TypeScript, with full support for:
-✨ Searchable command palette
-🏷️ Removable tags
-➕ Multiple selection
-📉 Optional tag display limit (+X overflow)
+A powerful and flexible **multi-select dropdown** built using React + TypeScript, with full support for:  
+✨ Searchable command palette  
+🏷️ Removable tags  
+➕ Multiple selection  
+📉 Optional tag display limit (+X overflow)  
 🎨 Beautiful styling (TailwindCSS + shadcn/ui)
 
 ---

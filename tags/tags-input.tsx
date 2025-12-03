@@ -1,3 +1,5 @@
+"use client"
+
 import * as React from "react"
 import { X } from "lucide-react"
 import { cn } from "@/lib/utils"
@@ -6,6 +8,7 @@ export interface TagsInputProps extends Omit<React.InputHTMLAttributes<HTMLInput
   value?: string[]
   onChange?: (tags: string[]) => void
   placeholder?: string
+  limit?: number
 }
 
 export function TagsInput({
@@ -13,11 +16,13 @@ export function TagsInput({
   onChange,
   placeholder = "Type and press Enter...",
   className,
+  limit,
   ...props
 }: TagsInputProps) {
   const [inputValue, setInputValue] = React.useState("")
   const [editingIndex, setEditingIndex] = React.useState<number | null>(null)
   const [editingValue, setEditingValue] = React.useState("")
+  const [isExpanded, setIsExpanded] = React.useState(false)
   const inputRef = React.useRef<HTMLInputElement>(null)
 
   const handleAddTag = () => {
@@ -38,7 +43,6 @@ export function TagsInput({
       e.preventDefault()
       handleAddTag()
     } else if (e.key === "Backspace" && !inputValue && value.length > 0) {
-      // Remove last tag when backspace is pressed and input is empty
       onChange?.(value.slice(0, -1))
     }
   }
@@ -69,6 +73,10 @@ export function TagsInput({
     }
   }
 
+  const shouldLimitTags = limit !== undefined && limit > 0 && value.length > limit
+  const visibleTags = shouldLimitTags && !isExpanded ? value.slice(0, limit) : value
+  const remainingCount = shouldLimitTags ? value.length - limit : 0
+
   return (
     <div
       className={cn(
@@ -77,7 +85,7 @@ export function TagsInput({
       )}
       onClick={() => inputRef.current?.focus()}
     >
-      {value.map((tag, index) => (
+      {visibleTags.map((tag, index) => (
         <div
           key={index}
           className="inline-flex items-center gap-1 rounded-md bg-secondary px-2 py-1 text-sm text-secondary-foreground"
@@ -117,6 +125,32 @@ export function TagsInput({
         className="flex-1 bg-transparent text-sm outline-none placeholder:text-muted-foreground min-w-[120px]"
         {...props}
       />
+      {shouldLimitTags && !isExpanded && (
+        <button
+          type="button"
+          onClick={(e) => {
+            e.stopPropagation()
+            setIsExpanded(true)
+          }}
+          className="inline-flex items-center gap-1 rounded-md bg-primary px-2 py-1 text-sm text-primary-foreground hover:bg-primary/90 transition-colors"
+          aria-label={`Show ${remainingCount} more tags`}
+        >
+          +{remainingCount}
+        </button>
+      )}
+      {shouldLimitTags && isExpanded && (
+        <button
+          type="button"
+          onClick={(e) => {
+            e.stopPropagation()
+            setIsExpanded(false)
+          }}
+          className="inline-flex items-center gap-1 rounded-md bg-muted px-2 py-1 text-sm text-muted-foreground hover:bg-muted/80 transition-colors"
+          aria-label="Show less"
+        >
+          Show less
+        </button>
+      )}
     </div>
   )
 }

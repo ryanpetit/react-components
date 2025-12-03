@@ -20,13 +20,12 @@ Each component lives in its own folder with:
 ## 📁 Repository Structure
 
 ```
-/components
-   ├── tags-input/
-   │     ├── tags-input.tsx
-   │     └── README.md
-   ├── button/
-   ├── dropdown/
-   ├── ...
+├── tags-input/
+│     ├── tags-input.tsx
+│     └── README.md
+├── button/
+├── dropdown/
+├── ...
 README.md
 ```
 

@@ -21,6 +21,10 @@ A powerful and flexible **multi-select dropdown** built using React + TypeScript
 
 ---
 
+![Multi-Select](./multi-select.png)
+
+---
+
 ## 📦 Installation
 
 [Shadcn UI library](%22https://ui.shadcn.com/)

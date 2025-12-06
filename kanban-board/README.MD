@@ -383,7 +383,7 @@ export default function Demo() {
     <main className="min-h-screen">
       <div className="container mx-auto py-8">
         <div className="mb-6">
-          <h1 className="text-4xl font-bold text-foreground mb-2">Project Board</h1>
+          <h1 className="text-4xl font-bold text-foreground mb-2">Kanban Board</h1>
           <p className="text-muted-foreground">Drag and drop items between columns to organize your tasks</p>
         </div>
         <KanbanBoard initialColumns={initialColumns} />

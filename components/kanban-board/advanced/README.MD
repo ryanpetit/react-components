@@ -37,6 +37,7 @@ This component uses:
 * **@dnd-kit/sortable**
 * **@dnd-kit/modifiers**
 * **@dnd-kit/utilities**
+* **[Shadcn UI library](https://ui.shadcn.com)**
 
 ---
 

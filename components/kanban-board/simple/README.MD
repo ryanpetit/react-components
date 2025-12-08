@@ -27,7 +27,7 @@ A clean, responsive, and fully-interactive **Kanban Board** component built with
 
 ## 📦 Installation
 
-Uses components from: [Shadcn UI library]("https://ui.shadcn.com/)
+Uses components from: [Shadcn UI library]("https://ui.shadcn.com")
 
 ## 🛠️ Usage Example
 

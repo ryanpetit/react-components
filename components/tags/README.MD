@@ -26,7 +26,7 @@ A lightweight, flexible, and editable **Tags Input** component built with React 
 
 ## 📦 Installation
 
-Uses components from: [Shadcn UI library]("https://ui.shadcn.com/)
+Uses components from: [Shadcn UI library]("https://ui.shadcn.com")
 
 ---
 

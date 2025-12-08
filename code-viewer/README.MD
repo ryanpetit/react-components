@@ -28,14 +28,7 @@ A powerful, file-tree-based **Code Viewer** component built with React + TypeScr
 
 ## 📦 Installation
 
-Uses components from the
-[Shadcn UI Library](https://ui.shadcn.com/)
-
----
-
-## 🧩 Component Code
-
-> 📌 *Click the GitHub copy icon to get the full code.*
+Uses components from: [Shadcn UI library]("https://ui.shadcn.com/)
 
 ---
 
@@ -128,15 +121,6 @@ A ✓ checkmark briefly appears when successful.
 
 * Click the **collapse icon** to hide the sidebar
 * Sidebar auto-reappears when selecting “Show Files”
-
----
-
-### 📄 Code Viewer
-
-* Line numbers
-* Monospace font
-* Smooth highlighting on hover
-* Handles empty lines gracefully
 
 ---
 

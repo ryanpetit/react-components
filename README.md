@@ -5,7 +5,7 @@
 This repo makes it easy for me to:  
 ✔️ Reuse components across projects  
 ✔️ Keep UI consistent  
-✔️ Avoid re-writing the same things  
+✔️ Follow DRY methodology   
 ✔️ Ship faster 🚀  
 
 ---
@@ -20,14 +20,30 @@ Each component lives in its own folder with:
 ## 📁 Repository Structure
 
 ```
-├── tags-input/
-│     ├── tags-input.tsx
-│     └── README.md
-├── button/
-├── dropdown/
-├── ...
-README.md
+├── components/
+│   ├── code-viewer/
+│   │   ├── code-viewer.tsx
+│   │   └── README.MD
+│   ├── kanban-board/
+│   │   ├── kanban-board.tsx
+│   │   └── README.MD
+│   ├── multi-select/
+│   │   ├── multi-select.tsx
+│   │   └── README.MD
+│   ├── tags/
+│   │   ├── tags-input.tsx
+│   │   └── README.MD
+│   └── ...
+├── LICENSE
+├── README.md
+├── react-ts-shadcn-bootstrap.sh
 ```
+
+---
+
+## 🚀 Quick Setup
+
+To streamline a Vite project, use the [`react-ts-shadcn-bootstrap.sh`](https://github.com/ryanpetit/react-components/blob/main/react-ts-shadcn-bootstrap.sh) script provided.
 
 ---
 

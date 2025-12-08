@@ -28,7 +28,7 @@ A powerful, file-tree-based **Code Viewer** component built with React + TypeScr
 
 ## 📦 Installation
 
-Uses components from: [Shadcn UI library]("https://ui.shadcn.com")
+Uses components from: [Shadcn UI library](https://ui.shadcn.com)
 
 ---
 

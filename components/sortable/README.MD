@@ -1,11 +1,6 @@
 # 🎯 Sortable Component (React + TypeScript)
 
-A flexible, powerful, and fully-typed **drag-and-drop sorting component** built with React, TypeScript, and **@dnd-kit** — featuring:
-✨ Vertical sorting
-↔️ Horizontal sorting
-🧩 Mixed grid sorting
-🎨 Beautiful styling (works great with TailwindCSS + shadcn/ui)
-⚡ Custom overlay rendering
+A flexible, powerful, and fully-typed **drag-and-drop sorting component**
 
 ---
 

@@ -1,11 +1,6 @@
 # 🗂️ Kanban Board Component (React + TypeScript)
 
-A clean, responsive, and fully-interactive **Kanban Board** component built with React + TypeScript — featuring:
-📝 Create items
-🚚 Drag & drop between columns
-📦 Reorder items within a column
-❌ Delete items
-🎨 Beautiful styling (works great with TailwindCSS + shadcn/ui)
+A clean, responsive, and fully-interactive **Kanban Board** component
 
 ---
 

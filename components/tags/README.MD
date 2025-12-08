@@ -1,11 +1,6 @@
 # 🎯 Tags Input Component (React + TypeScript)
 
-A lightweight, flexible, and editable **Tags Input** component built with React + TypeScript — featuring:  
-✨ Add tags  
-🖊️ Edit tags (double-click)  
-❌ Remove tags  
-⌨️ Keyboard shortcuts  
-🎨 Beautiful styling (works great with TailwindCSS + shadcn/ui)
+A lightweight, flexible, and editable **Tags Input** component
 
 ---
 

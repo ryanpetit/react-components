@@ -1,12 +1,6 @@
 # 📂 Code Viewer Component (React + TypeScript)
 
-A powerful, file-tree-based **Code Viewer** component built with React + TypeScript — featuring:
-📁 Folder + file navigation
-🔍 File search
-📄 Syntax-ready viewer
-📎 Copy-to-clipboard
-🖥️ Collapsible sidebar
-🎨 Beautiful developer-friendly UI (TailwindCSS + shadcn/ui)
+A powerful, file-tree-based **Code Viewer** component
 
 ---
 

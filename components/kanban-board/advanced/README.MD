@@ -1,14 +1,6 @@
 # 🗂️ Advanced Kanban Board Component (React + TypeScript)
 
-A powerful, flexible, fully-controlled **Kanban Board Component System** built with **React**, **TypeScript**, and **@dnd-kit** — featuring:
-
-📦 Controlled external state
-🚚 Drag & drop **columns**
-🚛 Drag & drop **items**
-🔀 Reorder items & columns
-🎭 Customizable overlays
-🧩 Build-your-own UI with small primitives
-🎨 Works seamlessly with TailwindCSS + shadcn/ui
+A powerful, flexible, fully-controlled **Kanban Board Component System**
 
 ---
 

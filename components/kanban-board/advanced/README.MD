@@ -139,11 +139,43 @@ function BasicExample() {
     ],
   })
 
+  // Example custom move handler
+   const handleMove = React.useCallback((moveEvent: { activeContainer: string; activeIndex: number; overContainer: string; overIndex: number }) => {
+    const { activeContainer, activeIndex, overContainer, overIndex } = moveEvent
+
+    console.log("[v0] Task moved:", {
+      from: `${activeContainer}[${activeIndex}]`,
+      to: `${overContainer}[${overIndex}]`,
+    })
+
+    // Manually update state with custom logic
+    setColumns((prevColumns) => {
+      const activeItems = [...prevColumns[activeContainer]]
+      const overItems = activeContainer === overContainer ? activeItems : [...prevColumns[overContainer]]
+
+      const [movedItem] = activeItems.splice(activeIndex, 1)
+      overItems.splice(overIndex, 0, movedItem)
+
+      return {
+        ...prevColumns,
+        [activeContainer]: activeItems,
+        [overContainer]: overItems,
+      }
+    })
+
+    // Here you could also:
+    // - Send API request to backend
+    // - Show toast notification
+    // - Track analytics
+    // - Validate the move
+  }, [])
+
   return (
     <Kanban
       value={columns}
       onValueChange={setColumns}
       getItemValue={item => item.id}
+      onMove={handleMove}
     >
       <KanbanBoard className="grid auto-rows-fr sm:grid-cols-3 gap-4">
         {Object.entries(columns).map(([col, items]) => (
@@ -242,7 +274,11 @@ function AdvancedExample() {
   });
 
   return (
-    <Kanban value={columns} onValueChange={setColumns} getItemValue={(item) => item.id}>
+    <Kanban 
+      value={columns} 
+      onValueChange={setColumns} 
+      getItemValue={(item) => item.id}
+      >
       <KanbanBoard className="grid auto-rows-fr grid-cols-3">
         {Object.entries(columns).map(([columnValue, tasks]) => (
           <TaskColumn key={columnValue} value={columnValue} tasks={tasks} isOverlay={false} />
@@ -268,7 +304,9 @@ function AdvancedExample() {
 export default function App() {
   return (
     <div className='flex flex-col gap-5'>
+      <h2 className='text-left font-bold'>Basic Example</h2>
       <BasicExample />
+      <h2 className='text-left font-bold'>Advanced Example</h2>
       <AdvancedExample />
     </div>
   );
@@ -340,4 +378,5 @@ Your overlay can fully mirror the dragged item or column:
 | 🚛 Move item       | Drag the item or its handle |
 | 🔀 Reorder items   | Drag item up/down           |
 | 🔁 Reorder columns | Drag column left/right      |
+
 | 🎭 Custom overlays | Provide function children   |

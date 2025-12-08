@@ -29,18 +29,13 @@ A powerful, file-tree-based **Code Viewer** component built with React + TypeScr
 ## 📦 Installation
 
 Uses components from the
-[Shadcn UI Library](%22https://ui.shadcn.com/)
+[Shadcn UI Library](https://ui.shadcn.com/)
 
 ---
 
 ## 🧩 Component Code
 
 > 📌 *Click the GitHub copy icon to get the full code.*
-
-```tsx
-// code-viewer.tsx
-// (your full component code exactly as provided)
-```
 
 ---
 

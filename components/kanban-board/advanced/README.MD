@@ -378,5 +378,4 @@ Your overlay can fully mirror the dragged item or column:
 | 🚛 Move item       | Drag the item or its handle |
 | 🔀 Reorder items   | Drag item up/down           |
 | 🔁 Reorder columns | Drag column left/right      |
-
 | 🎭 Custom overlays | Provide function children   |

@@ -22,6 +22,7 @@ This component uses:
 
 * `lucide-react` for icons
 * A `cn` utility for merging class names
+* Works seamlessly with Shadcn UI setups
 
 ---
 
@@ -84,4 +85,3 @@ export default function Demo() {
 | **Success State** | Shows a green check icon for 2 seconds               |
 | **Accessibility** | Includes a visually-hidden label (`sr-only`)         |
 | **Styling**       | Fully controlled by passed-in Tailwind classes       |
-

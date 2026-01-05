@@ -288,7 +288,7 @@ function FilterRow<TData>({ filter, columns, onUpdate, onRemove }: FilterRowProp
   return (
     <div className="flex items-start gap-2 flex-wrap">
       <Select value={filter.columnId} onValueChange={(value) => onUpdate(filter.id, { columnId: value })}>
-        <SelectTrigger className="w-[160px]">
+        <SelectTrigger className="w-[160px] cursor-pointer">
           <SelectValue />
         </SelectTrigger>
         <SelectContent>
@@ -301,7 +301,7 @@ function FilterRow<TData>({ filter, columns, onUpdate, onRemove }: FilterRowProp
       </Select>
 
       <Select value={filter.operator} onValueChange={(value) => onUpdate(filter.id, { operator: value })}>
-        <SelectTrigger className="w-[140px]">
+        <SelectTrigger className="w-[140px] cursor-pointer">
           <SelectValue />
         </SelectTrigger>
         <SelectContent>

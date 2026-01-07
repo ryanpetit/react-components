@@ -43,7 +43,7 @@ Each component lives in its own folder with:
 
 ## 🚀 Quick Setup
 
-To streamline a Vite project, use the [`react-ts-shadcn-bootstrap.sh`](https://github.com/ryanpetit/react-components/blob/main/react-ts-shadcn-bootstrap.sh) script provided to template out a react, typescript, shadcn-ui, tailwindcss project.
+To streamline a Vite project, use the [`react-ts-shadcn-bootstrap.sh`](./react-ts-shadcn-bootstrap.sh) script provided to template out a react, typescript, shadcn-ui, tailwindcss project.
 
 ---
 

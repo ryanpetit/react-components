@@ -73,8 +73,8 @@ export function DataTable<TData, TValue>({
     <div className="w-full h-full flex flex-col justify p-5 rounded-md flex-1">
       {global_search && <GlobalSearch table={table} />}
       <div className="flex justify-between items-start mb-4">
-        {advanced_filter && <AdvancedFilter table={table} />}
         <div className="flex gap-2">
+          {advanced_filter && <AdvancedFilter table={table} />}
           {column_visibility && (
             <DropdownMenu>
               <DropdownMenuTrigger asChild>

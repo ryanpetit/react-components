@@ -230,7 +230,7 @@ export function AdvancedFilter<TData>({ table }: AdvancedFilterProps<TData>) {
   return (
     <Popover>
       <PopoverTrigger asChild>
-        <Button variant="outline" size="sm" className="ml-auto cursor-pointer bg-transparent">
+        <Button variant="outline" size="sm" className="ml-auto cursor-pointer bg-transparent relative">
           <Filter className="h-4 w-4" />
           {filters.length > 0 && (
             <span className="absolute -top-1 -right-1 h-4 w-4 text-[10px] flex items-center justify-center bg-primary text-primary-foreground rounded-full">
@@ -496,3 +496,4 @@ function FilterValueInput({ filterType, value, options, onChange, isDisabled }: 
       return null
   }
 }
+

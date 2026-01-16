@@ -3,9 +3,9 @@
 import type { Table, Column } from "@tanstack/react-table"
 import { useState, useMemo, useEffect } from "react"
 import { X, Filter, Plus } from "lucide-react"
-import { Input } from "./ui/input"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "./ui/select"
-import { Button } from "./ui/button"
+import { Input } from "@/components/ui/input"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
 
 export type FilterType = "text" | "number" | "range" | "date" | "dateRange" | "boolean" | "select" | "multiSelect"
@@ -495,3 +495,4 @@ function FilterValueInput({ filterType, value, options, onChange, isDisabled }: 
       return null
   }
 }
+

@@ -6,6 +6,7 @@ import { X, Filter, Plus } from "lucide-react"
 import { Input } from "@/components/ui/input"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Button } from "@/components/ui/button"
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
 import { cn } from "@/lib/utils"
 
 export type FilterType = "text" | "number" | "range" | "date" | "dateRange" | "boolean" | "select" | "multiSelect"
@@ -142,7 +143,6 @@ function matchesFilter(cellValue: unknown, operator: string, filterValue: unknow
 }
 
 export function AdvancedFilter<TData>({ table }: AdvancedFilterProps<TData>) {
-  const [isOpen, setIsOpen] = useState(false)
   const [filters, setFilters] = useState<FilterCondition[]>([])
 
   const filterableColumns = useMemo(() => {
@@ -228,30 +228,31 @@ export function AdvancedFilter<TData>({ table }: AdvancedFilterProps<TData>) {
   }
 
   return (
-    <div className="">
-      <div className="flex items-center gap-2">
-        <Button variant="outline" size="sm" onClick={() => setIsOpen(!isOpen)} className="gap-2 cursor-pointer">
-          <Filter className="w-4 h-4" />
-          Advanced Filters
+    <Popover>
+      <PopoverTrigger asChild>
+        <Button variant="outline" size="sm" className="ml-auto cursor-pointer bg-transparent">
+          <Filter className="h-4 w-4" />
           {filters.length > 0 && (
-            <span className="ml-1 px-1.5 py-0.5 text-xs bg-primary text-primary-foreground rounded">
+            <span className="absolute -top-1 -right-1 h-4 w-4 text-[10px] flex items-center justify-center bg-primary text-primary-foreground rounded-full">
               {filters.length}
             </span>
           )}
         </Button>
+      </PopoverTrigger>
+      <PopoverContent className="w-auto p-4" align="start">
+        <div className="flex flex-col items-start space-y-3">
+          <div className="flex items-center justify-between w-full gap-4">
+            <h4 className="font-medium text-sm">Filters</h4>
+            {filters.length > 0 && (
+              <Button variant="ghost" size="sm" onClick={clearFilters} className="h-7 px-2 text-xs cursor-pointer">
+                <X className="w-3 h-3 mr-1" />
+                Clear all
+              </Button>
+            )}
+          </div>
 
-        {filters.length > 0 && (
-          <Button variant="ghost" size="sm" onClick={clearFilters} className="gap-2 cursor-pointer">
-            <X className="w-4 h-4" />
-            Clear
-          </Button>
-        )}
-      </div>
-
-      {isOpen && (
-        <div className="flex flex-col items-start border rounded-lg p-4 space-y-3 mt-2 bg-muted/30">
           {filters.length === 0 ? (
-            <p className="text-sm text-muted-foreground">No active filters. Click "Add Filter" to start.</p>
+            <p className="text-sm text-muted-foreground">No active filters.</p>
           ) : (
             filters.map((filter) => (
               <FilterRow
@@ -269,8 +270,8 @@ export function AdvancedFilter<TData>({ table }: AdvancedFilterProps<TData>) {
             Add Filter
           </Button>
         </div>
-      )}
-    </div>
+      </PopoverContent>
+    </Popover>
   )
 }
 
@@ -495,4 +496,3 @@ function FilterValueInput({ filterType, value, options, onChange, isDisabled }: 
       return null
   }
 }
-

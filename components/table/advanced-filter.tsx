@@ -2,12 +2,13 @@
 
 import type { Table, Column } from "@tanstack/react-table"
 import { useState, useMemo, useEffect } from "react"
-import { X, Filter, Plus } from "lucide-react"
+import { X, Filter, Plus, CaseSensitive, Regex } from "lucide-react"
 import { Input } from "@/components/ui/input"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Button } from "@/components/ui/button"
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
 import { cn } from "@/lib/utils"
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
 
 export type FilterType = "text" | "number" | "range" | "date" | "dateRange" | "boolean" | "select" | "multiSelect"
 
@@ -21,6 +22,8 @@ interface FilterCondition {
   columnId: string
   operator: string
   value: string | number | boolean | string[] | number[] | unknown
+  caseSensitive?: boolean
+  isRegex?: boolean
 }
 
 interface AdvancedFilterProps<TData> {
@@ -37,6 +40,7 @@ const OPERATORS: Record<FilterType, Array<{ value: string; label: string }>> = {
     { value: "endsWith", label: "Ends with" },
     { value: "isEmpty", label: "Is empty" },
     { value: "isNotEmpty", label: "Is not empty" },
+    { value: "regex", label: "Matches regex" },
   ],
   number: [
     { value: "=", label: "=" },
@@ -60,7 +64,14 @@ const OPERATORS: Record<FilterType, Array<{ value: string; label: string }>> = {
   multiSelect: [{ value: "in", label: "In any" }],
 }
 
-function matchesFilter(cellValue: unknown, operator: string, filterValue: unknown, filterType: FilterType): boolean {
+function matchesFilter(
+  cellValue: unknown,
+  operator: string,
+  filterValue: unknown,
+  filterType: FilterType,
+  caseSensitive?: boolean,
+  isRegex?: boolean,
+): boolean {
   if (operator === "isEmpty" || operator === "isNotEmpty") {
     const cellStr = String(cellValue).trim()
     if (operator === "isEmpty") return cellStr === ""
@@ -69,11 +80,20 @@ function matchesFilter(cellValue: unknown, operator: string, filterValue: unknow
 
   if (filterValue === "" || filterValue === null || filterValue === undefined) return true
 
-  const cellStr = String(cellValue).toLowerCase()
-  const filterStr = String(filterValue).toLowerCase()
+  const cellStr = caseSensitive ? String(cellValue) : String(cellValue).toLowerCase()
+  const filterStr = caseSensitive ? String(filterValue) : String(filterValue).toLowerCase()
 
   switch (filterType) {
     case "text": {
+      if (operator === "regex" || isRegex) {
+        try {
+          const regex = new RegExp(String(filterValue), caseSensitive ? "" : "i")
+          return regex.test(String(cellValue))
+        } catch {
+          return false // Invalid regex
+        }
+      }
+
       if (operator === "contains") return cellStr.includes(filterStr)
       if (operator === "notContains") return !cellStr.includes(filterStr)
       if (operator === "is") return cellStr === filterStr
@@ -172,7 +192,9 @@ export function AdvancedFilter<TData>({ table }: AdvancedFilterProps<TData>) {
           filters: columnFilters,
           filterType,
           matchFn: (cellValue: unknown) => {
-            return columnFilters.every((filter) => matchesFilter(cellValue, filter.operator, filter.value, filterType))
+            return columnFilters.every((filter) =>
+              matchesFilter(cellValue, filter.operator, filter.value, filterType, filter.caseSensitive, filter.isRegex),
+            )
           },
         })
       }
@@ -193,6 +215,8 @@ export function AdvancedFilter<TData>({ table }: AdvancedFilterProps<TData>) {
         columnId: firstColumn.id,
         operator: OPERATORS[filterType][0].value,
         value: "",
+        caseSensitive: false,
+        isRegex: false,
       },
     ])
   }
@@ -215,6 +239,8 @@ export function AdvancedFilter<TData>({ table }: AdvancedFilterProps<TData>) {
             columnId: updates.columnId,
             operator: OPERATORS[filterType][0].value,
             value: "",
+            caseSensitive: false,
+            isRegex: false,
           }
         }
 
@@ -289,6 +315,7 @@ function FilterRow<TData>({ filter, columns, onUpdate, onRemove }: FilterRowProp
   const operators = OPERATORS[filterType]
 
   const isInputDisabled = filter.operator === "isEmpty" || filter.operator === "isNotEmpty"
+  const isTextFilter = filterType === "text"
 
   return (
     <div className="flex items-start gap-2 flex-wrap">
@@ -325,6 +352,46 @@ function FilterRow<TData>({ filter, columns, onUpdate, onRemove }: FilterRowProp
         onChange={(value) => onUpdate(filter.id, { value })}
         isDisabled={isInputDisabled}
       />
+
+      {isTextFilter && !isInputDisabled && (
+        <TooltipProvider>
+          <div className="flex items-center gap-1">
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button
+                  variant={filter.caseSensitive ? "default" : "outline"}
+                  size="sm"
+                  className="h-9 w-9 p-0"
+                  onClick={() => onUpdate(filter.id, { caseSensitive: !filter.caseSensitive })}
+                >
+                  <CaseSensitive className="h-4 w-4" />
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>Case sensitive {filter.caseSensitive ? "(on)" : "(off)"}</p>
+              </TooltipContent>
+            </Tooltip>
+
+            {filter.operator !== "regex" && (
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Button
+                    variant={filter.isRegex ? "default" : "outline"}
+                    size="sm"
+                    className="h-9 w-9 p-0"
+                    onClick={() => onUpdate(filter.id, { isRegex: !filter.isRegex })}
+                  >
+                    <Regex className="h-4 w-4" />
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>Regex mode {filter.isRegex ? "(on)" : "(off)"}</p>
+                </TooltipContent>
+              </Tooltip>
+            )}
+          </div>
+        </TooltipProvider>
+      )}
 
       <Button variant="ghost" size="sm" onClick={() => onRemove(filter.id)} className="h-9 px-2">
         <X className="w-4 h-4" />
@@ -496,4 +563,3 @@ function FilterValueInput({ filterType, value, options, onChange, isDisabled }: 
       return null
   }
 }
-

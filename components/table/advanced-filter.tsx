@@ -361,7 +361,7 @@ function FilterRow<TData>({ filter, columns, onUpdate, onRemove }: FilterRowProp
                 <Button
                   variant={filter.caseSensitive ? "default" : "outline"}
                   size="sm"
-                  className="h-9 w-9 p-0"
+                  className="h-9 w-9 p-0 cursor-pointer"
                   onClick={() => onUpdate(filter.id, { caseSensitive: !filter.caseSensitive })}
                 >
                   <CaseSensitive className="h-4 w-4" />
@@ -378,7 +378,7 @@ function FilterRow<TData>({ filter, columns, onUpdate, onRemove }: FilterRowProp
                   <Button
                     variant={filter.isRegex ? "default" : "outline"}
                     size="sm"
-                    className="h-9 w-9 p-0"
+                    className="h-9 w-9 p-0 cursor-pointer"
                     onClick={() => onUpdate(filter.id, { isRegex: !filter.isRegex })}
                   >
                     <Regex className="h-4 w-4" />
@@ -563,3 +563,4 @@ function FilterValueInput({ filterType, value, options, onChange, isDisabled }: 
       return null
   }
 }
+

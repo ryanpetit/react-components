@@ -3,9 +3,9 @@
 import type { Table, Column } from "@tanstack/react-table"
 import { useState, useMemo, useEffect } from "react"
 import { X, Filter, Plus } from "lucide-react"
-import { Input } from "@/components/ui/input"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Button } from "@/components/ui/button"
+import { Input } from "./ui/input"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "./ui/select"
+import { Button } from "./ui/button"
 import { cn } from "@/lib/utils"
 
 export type FilterType = "text" | "number" | "range" | "date" | "dateRange" | "boolean" | "select" | "multiSelect"
@@ -32,6 +32,8 @@ const OPERATORS: Record<FilterType, Array<{ value: string; label: string }>> = {
     { value: "notContains", label: "Does not contain" },
     { value: "is", label: "Is" },
     { value: "isNot", label: "Is not" },
+    { value: "startsWith", label: "Starts with" },
+    { value: "endsWith", label: "Ends with" },
     { value: "isEmpty", label: "Is empty" },
     { value: "isNotEmpty", label: "Is not empty" },
   ],
@@ -75,6 +77,8 @@ function matchesFilter(cellValue: unknown, operator: string, filterValue: unknow
       if (operator === "notContains") return !cellStr.includes(filterStr)
       if (operator === "is") return cellStr === filterStr
       if (operator === "isNot") return cellStr !== filterStr
+      if (operator === "startsWith") return cellStr.startsWith(filterStr)
+      if (operator === "endsWith") return cellStr.endsWith(filterStr)
       if (operator === "isEmpty") return cellStr === ""
       if (operator === "isNotEmpty") return cellStr !== ""
       return true

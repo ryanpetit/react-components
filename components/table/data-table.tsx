@@ -10,7 +10,7 @@ import {
   getFilteredRowModel,
   type VisibilityState,
 } from "@tanstack/react-table"
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "./ui/table"
 import Pagination from "./data-table-pagination"
 import { ArrowUpDown, RefreshCcw, Settings2 } from "lucide-react"
 import { useState, useMemo } from "react"
@@ -27,6 +27,7 @@ interface DataTableProps<TData, TValue> {
   column_visibility?: boolean
   global_search?: boolean
   advanced_filter?: boolean
+  RowAction?: React.ComponentType<{ selectedRows: TData[]}>
 }
 
 export function DataTable<TData, TValue>({
@@ -37,9 +38,11 @@ export function DataTable<TData, TValue>({
   column_visibility = false,
   global_search = true,
   advanced_filter = false,
+  RowAction,
 }: DataTableProps<TData, TValue>) {
   const [globalFilter, setGlobalFilter] = useState("")
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({})
+  const [rowSelection, setRowSelection] = useState({})
 
   const enhancedColumns = useMemo(() => {
     return columns.map((col) => ({
@@ -64,9 +67,13 @@ export function DataTable<TData, TValue>({
     getSortedRowModel: getSortedRowModel(),
     onGlobalFilterChange: setGlobalFilter,
     getFilteredRowModel: getFilteredRowModel(),
+    onRowSelectionChange: setRowSelection,
     onColumnVisibilityChange: setColumnVisibility,
-    state: { globalFilter, columnVisibility },
+    state: { globalFilter, columnVisibility, rowSelection },
     initialState: { pagination: { pageSize: initial_page_size } },
+    onStateChange: () => {
+      setRowSelection({})
+    }
   })
 
   return (
@@ -114,6 +121,10 @@ export function DataTable<TData, TValue>({
           >
             <RefreshCcw />
           </Button>
+          {
+            Object.keys(rowSelection).length > 0 &&
+            RowAction && <RowAction selectedRows={table.getSelectedRowModel().rows.map(row => row.original)} />
+          }
         </div>
       </div>
       <Table>

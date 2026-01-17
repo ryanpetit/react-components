@@ -47,6 +47,10 @@ Uses components and utilities from:
 ```tsx
 import type { ColumnDef } from "@tanstack/react-table"
 import { DataTable } from "./data-table"
+import { Checkbox } from "./ui/checkbox"
+import { Dialog, DialogContent, DialogDescription, DialogTitle, DialogTrigger } from "./ui/dialog"
+import { Button } from "./ui/button"
+import { Settings } from "lucide-react"
 
 type ProductColumn = {
   name: string
@@ -59,7 +63,50 @@ type ProductColumn = {
   rating: number
 }
 
+function rowAction({ selectedRows }: { selectedRows: ProductColumn[] }) {
+  return (
+    <Dialog>
+      <DialogTrigger asChild>
+        <Button variant="outline" size="sm" className="ml-auto cursor-pointer bg-transparent"><Settings width={14} height={14} /></Button>
+      </DialogTrigger>
+      <DialogContent>
+        <DialogTitle>Selected Rows</DialogTitle>
+        <DialogDescription>
+          You have selected {selectedRows.length} row(s):
+        </DialogDescription>
+        {selectedRows.map((row, index) => (
+          <div key={index} className="p-2 border-b last:border-0">
+            {row.name}
+          </div>
+        ))}
+      </DialogContent>
+    </Dialog>
+  )
+}
+
 const productTableColumns: ColumnDef<ProductColumn>[] = [
+  {
+    id: "select",
+    header: ({ table }) => (
+      <Checkbox
+        checked={table.getIsAllPageRowsSelected() || (table.getIsSomePageRowsSelected() && "indeterminate")}
+        onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
+        aria-label="Select all"
+        className="cursor-pointer"
+      />
+    ),
+    cell: ({ row }) => (
+      <Checkbox
+        checked={row.getIsSelected()}
+        onCheckedChange={(value) => row.toggleSelected(!!value)}
+        aria-label="Select row"
+        className="cursor-pointer"
+      />
+    ),
+    enableSorting: false,
+    enableHiding: false,
+    size: 10
+  },
   {
     accessorKey: "name",
     header: "Product Name",
@@ -169,8 +216,9 @@ export default function AdvancedTable() {
           advanced_filter: boolean
           column_visibility: boolean
           initial_page_size: number
+          RowAction: React.ComponentType<{ selectedRows: TData[]}>
       */}
-      <DataTable data={sampleProducts} columns={productTableColumns} global_search={true} advanced_filter={true} column_visibility={true} />
+      <DataTable data={sampleProducts} columns={productTableColumns} global_search={true} advanced_filter={true} column_visibility={true} RowAction={rowAction} />
     </div>
   )
 }

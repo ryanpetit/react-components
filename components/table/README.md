@@ -69,7 +69,7 @@ function rowAction({ selectedRows }: { selectedRows: ProductColumn[] }) {
       <DialogTrigger asChild>
         <Button variant="outline" size="sm" className="ml-auto cursor-pointer bg-transparent"><Settings width={14} height={14} /></Button>
       </DialogTrigger>
-      <DialogContent>
+      <DialogContent className="overflow-y-scroll max-h-[80vh]">
         <DialogTitle>Selected Rows</DialogTitle>
         <DialogDescription>
           You have selected {selectedRows.length} row(s):
@@ -214,11 +214,12 @@ export default function AdvancedTable() {
           
           global_search: boolean
           advanced_filter: boolean
+          advanced_sort: boolean
           column_visibility: boolean
           initial_page_size: number
           RowAction: React.ComponentType<{ selectedRows: TData[]}>
       */}
-      <DataTable data={sampleProducts} columns={productTableColumns} global_search={true} advanced_filter={true} column_visibility={true} RowAction={rowAction} />
+      <DataTable data={sampleProducts} columns={productTableColumns} global_search={true} advanced_filter={true} advanced_sort={true} column_visibility={true} RowAction={rowAction} />
     </div>
   )
 }

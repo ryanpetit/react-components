@@ -10,7 +10,7 @@ import {
   getFilteredRowModel,
   type VisibilityState,
 } from "@tanstack/react-table"
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "./ui/table"
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import Pagination from "./data-table-pagination"
 import { ArrowUpDown, RefreshCcw, Settings2 } from "lucide-react"
 import { useState, useMemo } from "react"
@@ -18,6 +18,7 @@ import { Button } from "./ui/button"
 import { DropdownMenu, DropdownMenuCheckboxItem, DropdownMenuContent, DropdownMenuTrigger } from "./ui/dropdown-menu"
 import { GlobalSearch } from "./global-search"
 import { AdvancedFilter } from "./advanced-filter"
+import { AdvancedSort } from "./advanced-sort"
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
@@ -27,6 +28,7 @@ interface DataTableProps<TData, TValue> {
   column_visibility?: boolean
   global_search?: boolean
   advanced_filter?: boolean
+  advanced_sort?: boolean
   RowAction?: React.ComponentType<{ selectedRows: TData[]}>
 }
 
@@ -38,11 +40,13 @@ export function DataTable<TData, TValue>({
   column_visibility = false,
   global_search = true,
   advanced_filter = false,
+  advanced_sort = false,
   RowAction,
 }: DataTableProps<TData, TValue>) {
   const [globalFilter, setGlobalFilter] = useState("")
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({})
   const [rowSelection, setRowSelection] = useState({})
+  const [resetKey, setResetKey] = useState(0) // To reset advanced filter and sort components
 
   const enhancedColumns = useMemo(() => {
     return columns.map((col) => ({
@@ -70,10 +74,7 @@ export function DataTable<TData, TValue>({
     onRowSelectionChange: setRowSelection,
     onColumnVisibilityChange: setColumnVisibility,
     state: { globalFilter, columnVisibility, rowSelection },
-    initialState: { pagination: { pageSize: initial_page_size } },
-    onStateChange: () => {
-      setRowSelection({})
-    }
+    initialState: { pagination: { pageSize: initial_page_size } }
   })
 
   return (
@@ -81,7 +82,8 @@ export function DataTable<TData, TValue>({
       {global_search && <GlobalSearch table={table} />}
       <div className="flex justify-between items-start mb-4">
         <div className="flex gap-2">
-          {advanced_filter && <AdvancedFilter table={table} />}
+          {advanced_filter && <AdvancedFilter key={`filter-${resetKey}`} table={table} />}
+          {advanced_sort && <AdvancedSort key={`sort-${resetKey}`} table={table} />}
           {column_visibility && (
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
@@ -117,6 +119,9 @@ export function DataTable<TData, TValue>({
               table.reset()
               table.resetColumnFilters()
               table.resetColumnVisibility()
+              setRowSelection({})
+              setGlobalFilter("")
+              setResetKey((k) => k + 1)
             }}
           >
             <RefreshCcw />
@@ -136,7 +141,7 @@ export function DataTable<TData, TValue>({
                   <TableHead key={header.id} className="font-bold">
                     <div className="flex align-center">
                       {header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}
-                      {header.column.getCanSort() && (
+                      {header.column.getCanSort() && !advanced_sort && (
                         <button className="ml-2" onClick={header.column.getToggleSortingHandler()}>
                           <ArrowUpDown className="w-5 h-5 hover:cursor-pointer" />
                         </button>

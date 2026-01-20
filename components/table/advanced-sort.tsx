@@ -111,6 +111,7 @@ export function AdvancedSort<TData>({ table }: AdvancedSortProps<TData>) {
                 key={sort.id}
                 sort={sort}
                 columns={sortableColumns}
+                usedColumnIds={sorts.filter((s) => s.id !== sort.id).map((s) => s.columnId)}
                 onUpdate={updateSort}
                 onRemove={removeSort}
                 isFirst={index === 0}
@@ -118,7 +119,13 @@ export function AdvancedSort<TData>({ table }: AdvancedSortProps<TData>) {
             ))
           )}
 
-          <Button variant="outline" size="sm" onClick={addSort} className="gap-2 bg-transparent cursor-pointer">
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={addSort}
+            disabled={sorts.length >= sortableColumns.length}
+            className="gap-2 bg-transparent cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+          >
             <Plus className="w-4 h-4" />
             Add Sort
           </Button>
@@ -131,12 +138,15 @@ export function AdvancedSort<TData>({ table }: AdvancedSortProps<TData>) {
 interface SortRowProps<TData> {
   sort: SortCondition
   columns: Column<TData, unknown>[]
+  usedColumnIds: string[]
   onUpdate: (id: string, updates: Partial<SortCondition>) => void
   onRemove: (id: string) => void
   isFirst: boolean
 }
 
-function SortRow<TData>({ sort, columns, onUpdate, onRemove, isFirst }: SortRowProps<TData>) {
+function SortRow<TData>({ sort, columns, usedColumnIds, onUpdate, onRemove, isFirst }: SortRowProps<TData>) {
+  const availableColumns = columns.filter((col) => !usedColumnIds.includes(col.id))
+
   return (
     <div className="flex items-center gap-2">
       {!isFirst && (
@@ -147,7 +157,7 @@ function SortRow<TData>({ sort, columns, onUpdate, onRemove, isFirst }: SortRowP
           <SelectValue />
         </SelectTrigger>
         <SelectContent>
-          {columns.map((col) => (
+          {availableColumns.map((col) => (
             <SelectItem key={col.id} value={col.id}>
               {typeof col.columnDef.header === "string" ? col.columnDef.header : col.id}
             </SelectItem>

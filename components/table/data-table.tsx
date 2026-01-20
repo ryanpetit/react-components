@@ -14,8 +14,8 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import Pagination from "./data-table-pagination"
 import { ArrowUpDown, RefreshCcw, Settings2 } from "lucide-react"
 import { useState, useMemo } from "react"
-import { Button } from "./ui/button"
-import { DropdownMenu, DropdownMenuCheckboxItem, DropdownMenuContent, DropdownMenuTrigger } from "./ui/dropdown-menu"
+import { Button } from "../ui/button"
+import { DropdownMenu, DropdownMenuCheckboxItem, DropdownMenuContent, DropdownMenuTrigger } from "../ui/dropdown-menu"
 import { GlobalSearch } from "./global-search"
 import { AdvancedFilter } from "./advanced-filter"
 import { AdvancedSort } from "./advanced-sort"
@@ -29,7 +29,8 @@ interface DataTableProps<TData, TValue> {
   global_search?: boolean
   advanced_filter?: boolean
   advanced_sort?: boolean
-  RowAction?: React.ComponentType<{ selectedRows: TData[]}>
+  table_reset?: boolean
+  RowAction?: React.ComponentType<{ selectedRows: TData[] }>
 }
 
 export function DataTable<TData, TValue>({
@@ -37,10 +38,11 @@ export function DataTable<TData, TValue>({
   data,
   initial_page_size = 10,
   pagination = true,
-  column_visibility = false,
+  column_visibility = true,
   global_search = true,
-  advanced_filter = false,
-  advanced_sort = false,
+  advanced_filter = true,
+  advanced_sort = true,
+  table_reset = true,
   RowAction,
 }: DataTableProps<TData, TValue>) {
   const [globalFilter, setGlobalFilter] = useState("")
@@ -111,6 +113,7 @@ export function DataTable<TData, TValue>({
               </DropdownMenuContent>
             </DropdownMenu>
           )}
+          {table_reset && (
           <Button
             variant="outline"
             size="sm"
@@ -126,6 +129,7 @@ export function DataTable<TData, TValue>({
           >
             <RefreshCcw />
           </Button>
+          )}
           {
             Object.keys(rowSelection).length > 0 &&
             RowAction && <RowAction selectedRows={table.getSelectedRowModel().rows.map(row => row.original)} />
